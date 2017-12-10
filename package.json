@@ -1,0 +1,32 @@
+{
+  "name": "brsolab-tmp",
+  "version": "1.0.0",
+  "description": "create tmp files and directories on osTmpDir or a specified directory. This using promises",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafikalid/brsolab-tmp.git"
+  },
+  "keywords": [
+    "tmp",
+    "directory",
+    "file",
+    "crypto",
+    "promise",
+    "nodejs"
+  ],
+  "author": "brsolab <contact@brsolab.com> (brsolab.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rafikalid/brsolab-tmp/issues"
+  },
+  "homepage": "https://github.com/rafikalid/brsolab-tmp#readme",
+  "dependencies": {
+    "brsolab-process": "^1.0.2",
+    "fs": "0.0.1-security",
+    "os-tmpdir": "^1.0.2"
+  }
+}
