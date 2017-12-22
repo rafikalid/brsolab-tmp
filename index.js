@@ -81,7 +81,7 @@ module.exports.dir	= async function(options){
 	return new Promise((resolve, reject) => {
 		// create file
 		var createFx= (() => {
-			path	= dirPath + prefix + _rand() + suffix;
+			path	= dirPath + prefix + _rand() + suffix + '/';
 			fs.mkdir(path, mode, err => {
 				if(err){
 					if(err.code === 'EEXIST' && ++tries <= MAX_TRIES)
