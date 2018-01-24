@@ -7,6 +7,7 @@
 const	fs				= require('fs'),
 		OS_TMP_DIR		= require('os-tmpdir')(),
 		{spawn}			= require('brsolab-process'),
+		PATH			= require('path'),
 
 		DFLT_PREFIX		= 'tmp-',
 		DFLT_SUFFIX		= '.tmp',
@@ -17,6 +18,7 @@ const	fs				= require('fs'),
 		MAX_TRIES		= 100, 		// max tries count to create the tmp file or directory
 		KEEP_FD			= false, 	// keep file descriptor open, default to false
 		EMPTY_OBJ		= {},
+		EXEC_TIMEOUT	= 500, // default timeout
 		IS_WIN			= process.platform === 'win32'; // is windows or posix
 /**
  * Create temp or unique file
@@ -34,16 +36,18 @@ module.exports.file	= async function(options){
 			tries	= 0,
 			keepFD	= options.keepFD || KEEP_FD,
 			path, fdtr;
-	// prepare dir
-		if(dirPath.charAt(dirPath.length - 1) != '/') dirPath += IS_WIN ? '\\' : '/';
 	return new Promise((resolve, reject) => {
 		// create file
 		var createFx= (() => {
-			path	= dirPath + prefix + _rand() + suffix;
+			path	= PATH.join(dirPath, prefix + _rand() + suffix);
 			fs.open(path, CREATE_FLAGS, mode, (err, fd) => {
 				if(err){
 					if(err.code === 'EEXIST' && ++tries <= MAX_TRIES)
 						createFx();
+					else if(err.code === 'ENOENT') // folder not exists, create it
+						spawn('mkdir', ['-p', PATH.normalize(dirPath)], {timeout:EXEC_TIMEOUT})
+							.then(createFx)
+							.catch(reject);
 					else reject(err);
 				}else{
 					// file descriptor
